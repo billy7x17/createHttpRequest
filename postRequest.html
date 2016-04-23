@@ -3,7 +3,8 @@
 	<title>生成HTTP请求</title>
 </head>
 <body>
-<form>
+<!-- 发送请求后不毁坏当前表单 -->
+<form target="_blank">
 	<h1>
 	请在URL栏中填写要访问的地址，后面Paras栏中是要添加的参数。
 	</h1>
@@ -15,16 +16,39 @@
 
 	<h4>name = value</h4>
 
+	<button id="addParamButton" type="button"><span style="font-size:15;">增加参数</span></button>
+
 	<ul style="list-style:none;padding:0;">
 		<li style="margin-bottom : 5px;">
-			<input type="text">
-
-			=
-
-			<input type="text">
-
-			<a href="javascript:addNewPara()" style="text-decoration:none;"><span style="font-size:15;">+</span></a>
-		</li>	
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
+		<li style="margin-bottom : 5px;">
+			<input type="text"> = <input type="text">
+		</li>
 	</ul>
 </form>
 <input type="button" onclick="pushRequest('get')" value="发送Get请求" />
@@ -33,18 +57,17 @@
 var form = document.forms[0];
 var ul = form.lastElementChild;
 
+document.getElementById("addParamButton").onclick = addNewPara;
+
 function addNewPara() {
-	/*取要进行复制的html*/
+	var html = '<li style="margin-bottom : 5px;"><input type="text"> = <input type="text"></li>';
 
-	var html = ul.lastElementChild.innerHTML;
-	html = '<li style="margin-bottom : 5px;">' + html + '</li>';
+	var li = document.createElement('li');
 
-	/*去掉'+'*/
-	var a = ul.lastElementChild.lastElementChild;
-	a.parentNode.removeChild(a);
+	li.style.marginTop = '5px';
+	li.innerHTML = '<input type="text"> = <input type="text">';
 
-	ul.innerHTML += html;
-
+	ul.appendChild(li);
 }
 
 function pushRequest(method) {
@@ -65,8 +88,9 @@ function pushRequest(method) {
 		/*参数赋name value对*/
 		var lis = ul.children;
 		for (var i = 0; i < lis.length; i++)
-			lis[i].children[1].name = lis[i].children[0].value;
-
+			if (lis[i].children[1].name) {
+				lis[i].children[1].name = lis[i].children[0].value;
+			}
 		form.submit();
 	} else {
 		alert("URL输入不合法，请确认后重新输入");
@@ -84,7 +108,7 @@ function IsURL(str_url) {
 		+ '[a-z]{2,6})' // first level domain- .com or .museum 
 		+ '(:[0-9]{1,4})?' // 端口- :80 
 		+ '((/?)|' // a slash isn't required if there is no file name 
-		+ '(/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
+		+ '(/[0-9a-zA-Z_!~*\'().;?:@&=+$,%#-]+)+/?)$';
 	var re = new RegExp(strRegex);
 	//re.test() 
 	if (re.test(str_url)) {
